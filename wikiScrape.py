@@ -1,33 +1,20 @@
-import requests, urllib3, selenium, io
+import requests, urllib3, selenium, io, re
 
 import pandas as pd
 
 from bs4 import BeautifulSoup
 
-page = requests.get("https://en.wikipedia.org/wiki/List_of_Tour_de_France_general_classification_winners")
- 
-# scrape webpage
-soup = BeautifulSoup(page.content, 'html.parser')
- 
-# display scraped data
-print(soup.prettify())
+winners = pd.read_html("https://en.wikipedia.org/wiki/List_of_Tour_de_France_general_classification_winners",match = 'Tour de France general classification winners')[0]
 
-print(soup.find_all('table')[2])
+winnerCharac = pd.read_html("https://en.wikipedia.org/wiki/List_of_Tour_de_France_general_classification_winners")[1].rename(columns = {0:"Symbol",1:'Description'})
 
-pd.read_html(str(soup.find_all('table')[2]))
+winners.Cyclist
 
-pd.read_html(str(soup.find_all('table')[1]))
+winners['Notes'] = str()
 
-test = pd.read_html(str(soup.find_all('table')[1]))
+# for w in winners.Cyclist:
+#     if any([x in w for x in winnerCharac.Symbol]):
 
-test = str(test).split('\n')[1:]
-pd.read_csv(io.StringIO('\n'.join(test)),header = None)
-
-# print('Classes of each table:')
-# for table in soup.find_all('table'):
-#     print(table.get('caption'))
-
-soup.find_all('table')[0].get('class')
-table = soup.find_all('table')[0]
-table_body = table.find('tbody')
-table_body.find_all('tr')
+for ind,w in enumerate(winners.Cyclist):
+    if any([x in w for x in winnerCharac.Symbol]):
+        winners['Notes'].at[ind] = str(winnerCharac.Description[[x in w for x in winnerCharac.Symbol]])
