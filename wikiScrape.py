@@ -18,3 +18,19 @@ winners['Notes'] = str()
 for ind,w in enumerate(winners.Cyclist):
     if any([x in w for x in winnerCharac.Symbol]):
         winners['Notes'].at[ind] = str(winnerCharac.Description[[x in w for x in winnerCharac.Symbol]])
+
+stageTypes = pd.read_html("https://www.cyclingstage.com/tour-de-france-2019-route/")[0]
+
+
+fullStageResults = pd.read_html("https://www.procyclingstats.com/race/tour-de-france/2021/stage-3")
+
+r = requests.get(url="https://www.procyclingstats.com/race/tour-de-france/2021/stage-3")
+
+
+pd.read_html(r.text)[0]
+
+
+soup = BeautifulSoup(r, 'lxml')
+
+
+r.content,class="result-cont "
